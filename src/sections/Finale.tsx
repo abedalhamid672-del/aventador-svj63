@@ -24,24 +24,35 @@ export function Finale() {
         </a>
       </Section>
       <footer className="relative border-t border-[var(--hairline)] bg-black px-6 py-10 text-sm leading-relaxed text-smoke md:px-[6vw]">
-        <p>Concept study. Not affiliated with, endorsed by or connected to Automobili Lamborghini S.p.A.</p>
-        <p className="mt-2">
-          3D models (CC BY 4.0): &ldquo;2020 Lamborghini Aventador SVJ 63 Roadster&rdquo; by{' '}
-          <a className="underline underline-offset-4 hover:text-white" href="https://sketchfab.com/ddiaz-design">
-            Ddiaz Design
+        <p>
+          Created by Engineer{' '}
+          <a
+            className="underline underline-offset-4 hover:text-white"
+            href="https://github.com/abedalhamid672-del"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Abdel Hamid Al-Khatib
           </a>
-          ; &ldquo;Classic M4&rdquo; by{' '}
-          <a className="underline underline-offset-4 hover:text-white" href="https://sketchfab.com/jeandiz">
-            Mateusz Woliński
+          ; WhatsApp number:{' '}
+          <a
+            className="underline underline-offset-4 hover:text-white"
+            href="https://wa.me/972597183082"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            +972597183082
           </a>
-          . Both modified (optimised, recoloured, trademark artwork removed).
         </p>
         <p className="mt-2">
-          Nordschleife outline from{' '}
-          <a className="underline underline-offset-4 hover:text-white" href="https://www.openstreetmap.org/copyright">
-            © OpenStreetMap contributors
-          </a>{' '}
-          (ODbL).
+          <a
+            className="underline underline-offset-4 hover:text-white"
+            href="https://github.com/abedalhamid672-del"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub: abedalhamid672-del
+          </a>
         </p>
       </footer>
     </>
