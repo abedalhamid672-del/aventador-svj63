@@ -8,3 +8,6 @@ assets-src/*.raw.glb
 qa/
 .playwright-mcp/
 *.log
+
+# Cloudflare Wrangler local cache (holds the account id)
+.wrangler/
