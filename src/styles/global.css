@@ -1,0 +1,214 @@
+/* Scan src/ only: automatic detection would walk node_modules and the raw GLBs. */
+@import 'tailwindcss' source('../');
+@import './tokens.css';
+
+@theme {
+  --color-black: var(--black);
+  --color-carbon: var(--carbon);
+  --color-graphite: var(--graphite);
+  --color-red: var(--red);
+  --color-red-glow: var(--red-glow);
+  --color-smoke: var(--smoke);
+  --color-white: var(--white);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+html {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  scrollbar-color: var(--graphite) var(--black);
+  scrollbar-width: thin;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--black);
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--red);
+  color: var(--white);
+}
+
+:focus-visible {
+  outline: 1px solid var(--red-glow);
+  outline-offset: 4px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--black);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--graphite);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--red);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The custom cursor replaces the system one on fine pointers only (set by <Cursor>). */
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none !important;
+}
+
+/* Sound toggle: four bars that move only while sound is on. */
+.sound-bars rect {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  transform: scaleY(0.25);
+  transition: transform 300ms var(--ease-out-expo);
+}
+.sound-bars.is-on rect {
+  animation: sound-bar 0.9s ease-in-out infinite alternate;
+}
+.sound-bars.is-on rect:nth-child(2) { animation-delay: -0.3s; }
+.sound-bars.is-on rect:nth-child(3) { animation-delay: -0.6s; }
+.sound-bars.is-on rect:nth-child(4) { animation-delay: -0.15s; }
+@keyframes sound-bar {
+  from { transform: scaleY(0.3); }
+  to { transform: scaleY(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sound-bars.is-on rect {
+    animation: none;
+    transform: scaleY(0.8);
+  }
+}
+
+/* Big type leans with scroll speed (--scroll-skew is written by the scroll ticker). */
+.scroll-skew {
+  transform: skewY(calc(var(--scroll-skew, 0) * 1deg));
+  transform-origin: left center;
+}
+
+/* ── Hotspot pins: red pulsing dot, thin leader, glass card ─────────────────────────── */
+.hotspot {
+  position: relative;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 500ms var(--ease-out-expo),
+    transform 500ms var(--ease-out-expo);
+}
+.hotspot.is-shown {
+  opacity: 1;
+  transform: none;
+}
+/* 28px hit area (WCAG 2.5.8) around a 14px visible dot. */
+.hotspot-dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  translate: -50% -50%;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+}
+.hotspot-dot::before {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border-radius: inherit;
+  background: var(--red);
+}
+.hotspot.is-shown .hotspot-dot {
+  pointer-events: auto;
+}
+.hotspot-dot::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  border: 1px solid var(--red-glow);
+  animation: hotspot-pulse 1.8s var(--ease-out-expo) infinite;
+}
+@keyframes hotspot-pulse {
+  from {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+.hotspot-leader {
+  position: absolute;
+  left: 6px;
+  top: -6px;
+  width: 44px;
+  height: 1px;
+  background: var(--hairline-red);
+  transform: rotate(-38deg);
+  transform-origin: left center;
+}
+.hotspot-card {
+  position: absolute;
+  left: 40px;
+  bottom: 30px;
+  width: max-content;
+  max-width: 15rem;
+  padding: 10px 14px 12px;
+  background: var(--glass);
+  border: 1px solid var(--hairline-red);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+/* Near the right edge the leader and card open to the left. */
+.hotspot.is-flipped .hotspot-leader {
+  left: auto;
+  right: 6px;
+  transform: rotate(38deg);
+  transform-origin: right center;
+}
+.hotspot.is-flipped .hotspot-card {
+  left: auto;
+  right: 40px;
+}
+.hotspot-description {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgb(242 242 242 / 0.8);
+  transition: grid-template-rows 450ms var(--ease-out-expo);
+}
+.hotspot-description > span {
+  min-height: 0;
+}
+.hotspot.is-focused .hotspot-description {
+  grid-template-rows: 1fr;
+  margin-top: 8px;
+}
+main {
+  transition: opacity 500ms var(--ease-out-expo);
+}
+[data-hotspot-focus] main {
+  opacity: 0.2;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hotspot-dot::after {
+    animation: none;
+  }
+  .hotspot,
+  .hotspot-description {
+    transition: none;
+  }
+}

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Model check</title>
+<style>html,body{margin:0;height:100%;background:#050505;color:#f2f2f2;font:12px monospace}#hud{position:fixed;left:12px;top:10px}</style>
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script>
+</head><body><div id="hud"></div>
+<script type="module">
+// Dev-only sanity check for the optimised GLBs: scale, wheel pivots, blanked badges.
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+const q = new URLSearchParams(location.search);
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(innerWidth, innerHeight); renderer.setPixelRatio(devicePixelRatio);
+renderer.toneMapping = THREE.ACESFilmicToneMapping; document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0x0d0d0f);
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+const camera = new THREE.PerspectiveCamera(35, innerWidth / innerHeight, 0.1, 100);
+const [cx, cy, cz] = (q.get('cam') ?? '6,2.2,6').split(',').map(Number); camera.position.set(cx, cy, cz);
+const controls = new OrbitControls(camera, renderer.domElement); controls.target.set(0, 0.5, 0);
+scene.add(new THREE.GridHelper(10, 10, 0x441010, 0x1a1a1d));
+const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
+const wheels = [];
+loader.load(`/public/models/${q.get('m') ?? 'svj'}.glb`, (g) => {
+  scene.add(g.scene);
+  g.scene.traverse((o) => { if (/^Wheel_(FL|FR|RL|RR)$/.test(o.name)) wheels.push(o); });
+  const box = new THREE.Box3().setFromObject(g.scene), s = box.getSize(new THREE.Vector3());
+  let calls = 0; g.scene.traverse((o) => { if (o.isMesh) calls++; });
+  document.getElementById('hud').textContent = `size ${s.x.toFixed(2)} × ${s.y.toFixed(2)} × ${s.z.toFixed(2)} m · meshes ${calls} · wheels ${wheels.length}`;
+  window.__ready = true;
+});
+renderer.setAnimationLoop((t) => { for (const w of wheels) w.rotation.x = t * 0.004; controls.update(); renderer.render(scene, camera); });
+</script></body></html>

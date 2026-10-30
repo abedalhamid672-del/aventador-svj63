@@ -1,0 +1,10 @@
+node_modules/
+dist/
+*.log
+# Raw Sketchfab exports (64 MB); regenerate public/models with `npm run models`.
+assets-src/*.raw.glb
+
+# Local test output
+qa/
+.playwright-mcp/
+*.log

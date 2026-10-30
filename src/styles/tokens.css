@@ -1,0 +1,21 @@
+/* Design tokens. Palette is fixed by the brief: black and red, with neutrals. Red is an accent. */
+:root {
+  --black: #050505;
+  --carbon: #0d0d0f;
+  --graphite: #1a1a1d;
+  --red: #e10600;
+  --red-glow: #ff2a1f;
+  --smoke: #8a8a8f;
+  --white: #f2f2f2;
+
+  /* Derived: hairlines take the car's pinstripe role. */
+  --hairline: rgb(242 242 242 / 0.08);
+  --hairline-red: rgb(225 6 0 / 0.55);
+  --glass: rgb(5 5 5 / 0.6);
+
+  --font-display: 'Unbounded', 'Arial Black', sans-serif;
+  --font-body: 'Inter Tight', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
